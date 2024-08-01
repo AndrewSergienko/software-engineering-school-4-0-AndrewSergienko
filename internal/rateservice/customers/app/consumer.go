@@ -34,7 +34,7 @@ func (c Consumer) Run() (jetstream.ConsumeContext, error) {
 	ctx, cancel := context.WithTimeout(c.ctx, 5*time.Second)
 	defer cancel()
 
-	cons, _ := c.js.CreateOrUpdateConsumer(ctx, "events", jetstream.ConsumerConfig{
+	cons, err := c.js.CreateOrUpdateConsumer(ctx, "events", jetstream.ConsumerConfig{
 		Durable:       "customers_consumer",
 		AckPolicy:     jetstream.AckExplicitPolicy,
 		FilterSubject: "events.*",
@@ -78,6 +78,8 @@ func newMessageHandler(container presentation.InteractorFactory) func(msg jetstr
 				IsRollback:    true,
 			}
 			interactor.Handle(inputData)
+			_ = msg.Ack()
+		default:
 			_ = msg.Ack()
 		}
 	}
