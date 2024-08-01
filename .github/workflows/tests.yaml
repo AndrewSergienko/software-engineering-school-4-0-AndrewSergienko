@@ -36,8 +36,8 @@ jobs:
         image: nats:latest
         ports:
           - 4222:4222
-        options:
-          --js
+        command: --js
+
 
     steps:
     - uses: actions/checkout@v3
