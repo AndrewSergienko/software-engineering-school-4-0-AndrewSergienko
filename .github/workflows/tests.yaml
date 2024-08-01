@@ -33,11 +33,13 @@ jobs:
           POSTGRES_DB: goservice
 
       nats:
-        image: nats:latest
+        image: nats:2.10
+        container_name: nats
         ports:
-          - 4222:4222
-        command: --js
-
+          - "4222:4222"
+        restart: unless-stopped
+        command:
+          - "-js"
 
     steps:
     - uses: actions/checkout@v3
